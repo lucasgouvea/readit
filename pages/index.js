@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {
   Container,
   Card,
@@ -5,6 +6,18 @@ import {
   CardHeader,
   Col,
   CardText,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  Collapse,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavbarText,
 } from 'reactstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,17 +46,44 @@ const BookCard = ({ book }) => (
     </CardText>
   </Card>
 );
-const Home = ({ books }) => (
-  <>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet" />
-    <Container className="align-content-center align-self-center">
-      <Col className="mt-4 mb-3" style={{ textAlign: 'center' }}><h1>ReadIt</h1></Col>
-      <Container className="row justify-content-center" style={{ marginRight: 0, marginLeft: 0 }}>
-        {books.map((book) => <BookCard book={book} />)}
+const Home = ({ books }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet" />
+        <Navbar color="light" light expand="md">
+          <NavbarBrand href="/">ReadIt</NavbarBrand>
+          <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="mr-auto" navbar>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Menu
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    Option 1
+                  </DropdownItem>
+                  <DropdownItem>
+                    Option 2
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem>
+                    Reset
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      <Container className="align-content-center align-self-center">
+        <Container className="row justify-content-center" style={{ marginRight: 0, marginLeft: 0 }}>
+          {books.map((book) => <BookCard book={book} />)}
+        </Container>
       </Container>
-    </Container>
-  </>
-);
+    </>
+  );
+}
 
 Home.getInitialProps = async () => {
   const res = await fetch(url, { headers: { 'Access-Control-Allow-Origin': '*' } });
