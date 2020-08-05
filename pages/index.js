@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
   Container,
   Card,
@@ -11,52 +10,42 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/index.css';
 
-const img = 'https://images-na.ssl-images-amazon.com/images/I/41gOdaJX5cL._SX293_BO1,204,203,200_.jpg';
+const url = 'https://adplf0tcqj.execute-api.us-east-1.amazonaws.com/Prod/books';
 
-const summary = '\
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.\
-Etiam eget ligula eu lectus lobortis condimentum.\
-Aliquam nonummy auctor massa.\
-Pellentesque habitant morbi tristique senectus et netus et malesuada\
-fames ac turpis egestas. Nulla at risus. Quisque purus magna,\
-auctor et, sagittis ac, posuere eu, lectus. Nam mattis, felis ut adipiscing.';
-
-const getBookSummary = () => {
+const getBookSummary = (summary) => {
   // for smaller screens
   if (process.browser && window.screen.width < 500) {
     return `${summary.substr(0, 90)}...`;
   }
   return summary;
 };
-const BookCard = () => (
+const BookCard = ({ book }) => (
   <Card style={{ width: 400, alignItems: 'center' }}>
-    <CardHeader style={{ fontSize: 19, width: '100%' }}>Porque nós dormimos</CardHeader>
+    <CardHeader style={{ fontSize: 19, width: '100%' }}>{book.book}</CardHeader>
     <CardBody>
-      <img src={img} width={120} height={170} alt="img" />
+      <img src={book.img} width={120} height={170} alt="img" />
     </CardBody>
-    <CardText style={{
-      fontSize: 18, paddingTop: '1%', paddingLeft: '4%', paddingRight: '4%', paddingBottom: '2%',
-    }}
-    >
-      {getBookSummary()}
+    <CardText style={{ fontSize: 18 }}>
+      {getBookSummary(book.summary)}
     </CardText>
   </Card>
 );
-const Home = () => (
+const Home = ({ books }) => (
   <>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet" />
-    <Container className="align-content-center">
+    <Container className="align-content-center align-self-center">
       <Col className="mt-4 mb-3" style={{ textAlign: 'center' }}><h1>ReadIt</h1></Col>
       <Container className="row justify-content-center">
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
+        {books.map((book) => <BookCard book={book} />)}
       </Container>
     </Container>
   </>
 );
+
+Home.getInitialProps = async () => {
+  const res = await fetch(url, { headers: { 'Access-Control-Allow-Origin': '*' } });
+  const json = await res.json();
+  return { books: json };
+};
 
 export default Home;
