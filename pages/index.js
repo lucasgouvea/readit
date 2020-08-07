@@ -34,7 +34,7 @@ const getBookSummary = (summary) => {
 };
 const BookCard = ({ book }) => (
   <Card style={{ width: 300, alignItems: 'center' }}>
-    <CardHeader style={{ fontSize: 19, width: '100%' }}>{book.book}</CardHeader>
+    <CardHeader style={{ fontSize: 19, width: '100%' }}>{book.name}</CardHeader>
     <CardBody>
       <img src={book.img} width={120} height={170} alt="img" />
     </CardBody>
